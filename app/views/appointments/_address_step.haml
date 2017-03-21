@@ -1,0 +1,24 @@
+= appointment_fields.label :address
+%br
+%br
+= fields_for :address do |address_fields|
+  .field.form-group
+    = address_fields.label :building
+    %br
+    = address_fields.text_field :building, class: "form-control"
+  .field.form-group
+    = address_fields.label :street
+    %br
+    = address_fields.text_field :street, class: "form-control"
+  .field.form-group
+    = address_fields.label :city
+    %br
+    = address_fields.text_field :city, class: "form-control"
+  .field.form-group
+    = address_fields.label :country
+    %br
+    = address_fields.text_field :country, class: "form-control"
+  .field.form-group
+    = address_fields.label :postal_code
+    %br
+    = address_fields.text_field :postal_code, class: "form-control"

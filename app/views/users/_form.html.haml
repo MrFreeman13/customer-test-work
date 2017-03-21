@@ -1,24 +1,31 @@
 .container
-  = form_for(@user) do |f|
-    - if @user.errors.any?
-      #error_explanation
-        %h2
-          = pluralize(@user.errors.count, "error")
-          prohibited this user from being saved:
-        %ul
-          - @user.errors.full_messages.each do |message|
-            %li= message
-    .field
-      = f.label :name
-      %br/
-      = f.text_field :name
-    .field
-      = f.label :email
-      %br/
-      = f.text_field :email
-    .field
-      = f.label :password_sha
-      %br/
-      = f.text_field :password_sha
-    %button.btn.btn-lg.btn-primary.btn-block{:type => "submit"}
-      = f.submit
+  .row
+    .col-md-8
+      = form_for(@user) do |f|
+        - if @user.errors.any?
+          #error_explanation
+            %h2
+              = pluralize(@user.errors.count, "error")
+              prohibited this user from being saved:
+            %ul
+              - @user.errors.full_messages.each do |message|
+                %li= message
+        .field.form-group
+          = f.label :name
+          %br
+          = f.text_field :name, class: "form-control"
+        .field.form-group
+          = f.label :email
+          %br
+          = f.text_field :email, class: "form-control"
+        .field.form-group
+          = f.label :password
+          %br
+          = f.password_field :password, class: "form-control"
+        .field.form-group
+        = f.label :password_confirmation
+        %br
+        = f.password_field :password_confirmation, class: "form-control"
+        %br
+        = f.submit :class => "btn btn-warning btn-mini", "data-disable-with"=> "Just a moment..." do
+          %i.icon-heart.icon-white

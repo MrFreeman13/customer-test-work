@@ -1,0 +1,16 @@
+.container
+  .row
+    .col-md-8
+      = form_for [@user, @appointment] do |appointment_fields|
+        - if @appointment.errors.any?
+          #error_explanation
+            %h2
+              = pluralize(@appointment.errors.count, "error")
+              prohibited this appointment from being saved:
+            %ul
+              - @appointment.errors.full_messages.each do |message|
+                %li= message
+
+        = render "#{@appointment.current_step}_step", appointment_fields: appointment_fields
+        = appointment_fields.submit "Back", name: :back_button, class: "btn btn-default" unless @appointment.first_step?
+        = appointment_fields.submit "Next", class: "btn btn-default"

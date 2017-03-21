@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
-  #
-  # scope '/api' do
-  #   resources :users
-  # end
+
   root 'users#new'
-  resources :users
+  resources :users, only: [:new, :create, :update, :edit] do
+    resources :appointments, only: [:new, :create, :edit]
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

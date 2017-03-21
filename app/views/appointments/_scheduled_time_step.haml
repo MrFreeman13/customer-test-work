@@ -1,0 +1,4 @@
+.field.form-group
+  = appointment_fields.label :scheduled_time
+  %br
+  = appointment_fields.datetime_select :scheduled_time, {}, { class: "form-control" }

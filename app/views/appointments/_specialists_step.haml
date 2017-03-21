@@ -1,0 +1,4 @@
+.field.form-group
+  = appointment_fields.label :specialist
+  %br
+  = appointment_fields.select :specialist, options_for_select(specialist_collections, selected_value), {}, { class: "form-control" }
