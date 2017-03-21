@@ -1,18 +1,24 @@
 class AppointmentsController < ApplicationController
-  before_action :set_user, only: [:new, :create]
+  before_action :set_user, only: [:new, :create, :show]
+  before_action :set_appointment, only: [:show]
 
   def new
-    session[:appointment_params] ||= {}
+    session[@user.id] ||= { appointment_params: {} }
     @appointment = Appointment.new
     @appointment.user = @user
     @appointment.build_address
   end
 
-  def create
-    session[:appointment_params].deep_merge!(prepare_params.compact) if params[:appointment]
-    @appointment = Appointment.new(session[:appointment_params])
+  def show
     @appointment.user = @user
-    @appointment.current_step = session[:appointment_step]
+    session[@user.id].symbolize_keys[:appointment_step] = :specialists
+  end
+
+  def create
+    session[@user.id].symbolize_keys[:appointment_params].deep_merge!(prepare_params.compact) if params[:appointment]
+    @appointment = Appointment.new(session[@user.id].symbolize_keys[:appointment_params])
+    @appointment.user = @user
+    @appointment.current_step = session[@user.id].symbolize_keys[:appointment_step]
 
     if @appointment.valid?
       if params[:back_button]
@@ -22,13 +28,13 @@ class AppointmentsController < ApplicationController
       else
         @appointment.next_step
       end
-      session[:appointment_step] = @appointment.current_step
+      session[@user.id].symbolize_keys[:appointment_step] = @appointment.current_step
     end
 
     if @appointment.new_record?
       render :new
     else
-      session[:appointment_step] = session[:appointment_params] = nil
+      session[@user.id].symbolize_keys[:appointment_step] = session[@user.id].symbolize_keys[:appointment_params] = nil
       flash[:notice] = 'Appointment saved.'
       redirect_to new_user_appointment_url
     end
@@ -36,11 +42,7 @@ class AppointmentsController < ApplicationController
 
   private
     def set_appointment
-      if params[:id]
-        @appointment = Appointment.find(params[:id])
-      else
-        @appointment = Appointment.new(session[:appointment_params])
-      end
+      @appointment = Appointment.new(session[@user.id].symbolize_keys[:appointment_params])
     end
 
     def set_user
