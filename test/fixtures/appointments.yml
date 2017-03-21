@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  specialist: 1
+  scheduled_time: 2017-03-20 18:20:26
+  user_id: 1
+  address_id: 1
+
+two:
+  specialist: 1
+  scheduled_time: 2017-03-20 18:20:26
+  user_id: 1
+  address_id: 1
