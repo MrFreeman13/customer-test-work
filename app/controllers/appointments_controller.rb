@@ -11,14 +11,14 @@ class AppointmentsController < ApplicationController
 
   def show
     @appointment.user = @user
-    session[@user.id].symbolize_keys[:appointment_step] = :specialists
+    session_users[:appointment_step] = :specialists
   end
 
   def create
-    session[@user.id].symbolize_keys[:appointment_params].deep_merge!(prepare_params.compact) if params[:appointment]
-    @appointment = Appointment.new(session[@user.id].symbolize_keys[:appointment_params])
+    session_users[:appointment_params].deep_merge!(prepare_params.compact) if params[:appointment]
+    @appointment = Appointment.new(session_users[:appointment_params])
     @appointment.user = @user
-    @appointment.current_step = session[@user.id].symbolize_keys[:appointment_step]
+    @appointment.current_step = session_users[:appointment_step]
 
     if @appointment.valid?
       if params[:back_button]
@@ -28,13 +28,13 @@ class AppointmentsController < ApplicationController
       else
         @appointment.next_step
       end
-      session[@user.id].symbolize_keys[:appointment_step] = @appointment.current_step
+      session_users[:appointment_step] = @appointment.current_step
     end
 
     if @appointment.new_record?
       render :new
     else
-      session[@user.id].symbolize_keys[:appointment_step] = session[@user.id].symbolize_keys[:appointment_params] = nil
+      session_users[:appointment_step] = session_users[:appointment_params] = nil
       flash[:notice] = 'Appointment saved.'
       redirect_to new_user_appointment_url
     end
@@ -42,7 +42,11 @@ class AppointmentsController < ApplicationController
 
   private
     def set_appointment
-      @appointment = Appointment.new(session[@user.id].symbolize_keys[:appointment_params])
+      @appointment = Appointment.new(session_users[:appointment_params])
+    end
+
+    def session_users
+      session[@user.id].symbolize_keys
     end
 
     def set_user
